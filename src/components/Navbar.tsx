@@ -5,8 +5,16 @@ import FlightIcon from '@mui/icons-material/Flight';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import styled from '@emotion/styled';
+import { Theme } from '@mui/material/styles';
 
-const AnimatedButton = styled(motion(Button))`
+interface AnimatedButtonProps {
+  to?: string;
+  theme?: Theme;
+  children?: React.ReactNode;
+  [key: string]: any;
+}
+
+const AnimatedButton = styled(motion.div)<AnimatedButtonProps>`
   position: relative;
   overflow: hidden;
   
@@ -17,7 +25,7 @@ const AnimatedButton = styled(motion(Button))`
     left: 0;
     width: 100%;
     height: 2px;
-    background: ${({ theme }) => theme.palette.primary.main};
+    background: #90caf9;
     transform: scaleX(0);
     transform-origin: right;
     transition: transform 0.3s ease;
@@ -32,7 +40,7 @@ const AnimatedButton = styled(motion(Button))`
 const StyledAppBar = styled(AppBar)`
   background: rgba(18, 18, 18, 0.8);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid ${({ theme }) => alpha(theme.palette.primary.main, 0.1)};
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 `;
 
 const Navbar = () => {
@@ -94,32 +102,28 @@ const Navbar = () => {
         <Box component={motion.div} sx={{ display: 'flex', gap: 1 }}>
           {currentUser ? (
             <>
-              <AnimatedButton
-                component={RouterLink}
-                to="/"
-                color="inherit"
-                variants={buttonVariants}
-                whileHover="hover"
-                sx={{ 
-                  color: location.pathname === '/' ? theme.palette.primary.main : 'inherit'
-                }}
-              >
-                Home
+              <AnimatedButton as={RouterLink} to="/">
+                <Button
+                  color="inherit"
+                  sx={{ 
+                    color: location.pathname === '/' ? theme.palette.primary.main : 'inherit'
+                  }}
+                >
+                  Home
+                </Button>
+              </AnimatedButton>
+              <AnimatedButton as={RouterLink} to="/metar">
+                <Button
+                  color="inherit"
+                  sx={{ 
+                    color: location.pathname === '/metar' ? theme.palette.primary.main : 'inherit'
+                  }}
+                >
+                  METAR Search
+                </Button>
               </AnimatedButton>
               <AnimatedButton
-                component={RouterLink}
-                to="/metar"
-                color="inherit"
-                variants={buttonVariants}
-                whileHover="hover"
-                sx={{ 
-                  color: location.pathname === '/metar' ? theme.palette.primary.main : 'inherit'
-                }}
-              >
-                METAR Search
-              </AnimatedButton>
-              <AnimatedButton
-                component={RouterLink}
+                as={RouterLink}
                 to="/about"
                 color="inherit"
                 variants={buttonVariants}
@@ -147,44 +151,29 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <AnimatedButton
-                component={RouterLink}
-                to="/about"
-                color="inherit"
-                variants={buttonVariants}
-                whileHover="hover"
-                sx={{ 
-                  color: location.pathname === '/about' ? theme.palette.primary.main : 'inherit'
-                }}
-              >
-                About
+              <AnimatedButton>
+                <Button
+                  component={RouterLink}
+                  to="/login"
+                  color="inherit"
+                  sx={{ 
+                    color: location.pathname === '/login' ? '#90caf9' : 'inherit'
+                  }}
+                >
+                  Log In
+                </Button>
               </AnimatedButton>
-              <AnimatedButton
-                component={RouterLink}
-                to="/login"
-                color="inherit"
-                variants={buttonVariants}
-                whileHover="hover"
-                sx={{ 
-                  color: location.pathname === '/login' ? theme.palette.primary.main : 'inherit'
-                }}
-              >
-                Log In
-              </AnimatedButton>
-              <AnimatedButton
-                component={RouterLink}
-                to="/signup"
-                color="inherit"
-                variants={buttonVariants}
-                whileHover="hover"
-                sx={{
-                  background: `linear-gradient(45deg, ${alpha(theme.palette.primary.main, 0.1)}, ${alpha(theme.palette.secondary.main, 0.1)})`,
-                  '&:hover': {
-                    background: `linear-gradient(45deg, ${alpha(theme.palette.primary.main, 0.2)}, ${alpha(theme.palette.secondary.main, 0.2)})`,
-                  }
-                }}
-              >
-                Sign Up
+              <AnimatedButton>
+                <Button
+                  component={RouterLink}
+                  to="/signup"
+                  color="inherit"
+                  sx={{ 
+                    color: location.pathname === '/signup' ? '#90caf9' : 'inherit'
+                  }}
+                >
+                  Sign Up
+                </Button>
               </AnimatedButton>
             </>
           )}
@@ -194,4 +183,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar; 
+export default Navbar;

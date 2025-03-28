@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Box } from '@mui/material';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -12,21 +11,27 @@ import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Welcome from './components/Welcome';
 
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: '#90caf9',
-    },
-    secondary: {
-      main: '#f48fb1',
-    },
-    background: {
-      default: '#121212',
-      paper: '#1e1e1e',
-    },
-  },
-});
+class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { hasError: boolean }> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error: any) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: any, errorInfo: any) {
+    console.error('Error caught by boundary:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <div>Something went wrong. Check the console for details.</div>;
+    }
+    return this.props.children;
+  }
+}
 
 interface PrivateRouteProps {
   children: React.ReactNode;
@@ -39,40 +44,42 @@ function PrivateRoute({ children }: PrivateRouteProps) {
 
 function App() {
   return (
-    <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-      <AuthProvider>
-        <Router>
-          <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <ErrorBoundary>
+      <Router>
+        <CssBaseline />
+        <AuthProvider>
+          <Box 
+            sx={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              minHeight: '100vh',
+              bgcolor: '#121212',
+              color: '#ffffff'
+            }}
+          >
             <Navbar />
-            <Box component="main" sx={{ flexGrow: 1 }}>
+            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
               <Routes>
+                <Route path="/" element={
+                  <PrivateRoute>
+                    <Home />
+                  </PrivateRoute>
+                } />
+                <Route path="/metar" element={
+                  <PrivateRoute>
+                    <MetarSearch />
+                  </PrivateRoute>
+                } />
+                <Route path="/about" element={<About />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<SignUp />} />
-                <Route path="/about" element={<About />} />
-                <Route
-                  path="/"
-                  element={
-                    <PrivateRoute>
-                      <Welcome />
-                    </PrivateRoute>
-                  }
-                />
-                <Route
-                  path="/metar"
-                  element={
-                    <PrivateRoute>
-                      <MetarSearch />
-                    </PrivateRoute>
-                  }
-                />
               </Routes>
             </Box>
           </Box>
-        </Router>
-      </AuthProvider>
-    </ThemeProvider>
+        </AuthProvider>
+      </Router>
+    </ErrorBoundary>
   );
 }
 
-export default App; 
+export default App;

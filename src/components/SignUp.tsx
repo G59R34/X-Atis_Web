@@ -1,12 +1,23 @@
 import React, { useState } from 'react';
-import { Container, Paper, TextField, Button, Typography, Alert, Box } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Box, TextField, Button, Typography, Alert } from '@mui/material';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import styled from '@emotion/styled';
 
-const SignUp = () => {
+const GlassContainer = styled(Box)`
+  padding: 32px;
+  border-radius: 8px;
+  background: rgba(18, 18, 18, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(144, 202, 249, 0.1);
+  width: 100%;
+  max-width: 400px;
+`;
+
+export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -15,7 +26,7 @@ const SignUp = () => {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    if (password !== confirmPassword) {
+    if (password !== passwordConfirm) {
       return setError('Passwords do not match');
     }
 
@@ -24,72 +35,66 @@ const SignUp = () => {
       setLoading(true);
       await signup(email, password);
       navigate('/');
-    } catch (err) {
+    } catch {
       setError('Failed to create an account');
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
   }
 
   return (
-    <Container maxWidth="sm">
-      <Box sx={{ mt: 8 }}>
-        <Paper sx={{ p: 4 }}>
-          <Typography variant="h4" component="h1" gutterBottom align="center">
+    <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
+      <GlassContainer>
+        <Typography variant="h5" component="h2" gutterBottom>
+          Sign Up
+        </Typography>
+        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+        <Box component="form" onSubmit={handleSubmit}>
+          <TextField
+            label="Email"
+            type="email"
+            required
+            fullWidth
+            margin="normal"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <TextField
+            label="Password"
+            type="password"
+            required
+            fullWidth
+            margin="normal"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <TextField
+            label="Confirm Password"
+            type="password"
+            required
+            fullWidth
+            margin="normal"
+            value={passwordConfirm}
+            onChange={(e) => setPasswordConfirm(e.target.value)}
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            disabled={loading}
+          >
             Sign Up
-          </Typography>
-          {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-          <form onSubmit={handleSubmit}>
-            <TextField
-              label="Email"
-              type="email"
-              required
-              fullWidth
-              margin="normal"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <TextField
-              label="Password"
-              type="password"
-              required
-              fullWidth
-              margin="normal"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <TextField
-              label="Confirm Password"
-              type="password"
-              required
-              fullWidth
-              margin="normal"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              fullWidth
-              size="large"
-              disabled={loading}
-              sx={{ mt: 3 }}
-            >
-              Sign Up
-            </Button>
-          </form>
-          <Box sx={{ mt: 2, textAlign: 'center' }}>
-            <Button
-              color="primary"
-              onClick={() => navigate('/login')}
-            >
-              Already have an account? Log In
-            </Button>
+          </Button>
+          <Box textAlign="center">
+            <Typography variant="body2">
+              Already have an account?{' '}
+              <RouterLink to="/login" style={{ color: '#90caf9' }}>
+                Log In
+              </RouterLink>
+            </Typography>
           </Box>
-        </Paper>
-      </Box>
-    </Container>
+        </Box>
+      </GlassContainer>
+    </Box>
   );
-};
-
-export default SignUp; 
+}

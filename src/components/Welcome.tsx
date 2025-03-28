@@ -31,13 +31,13 @@ const StyledCard = styled(motion(Card))`
   }
 `;
 
-const GlassContainer = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(4),
-  borderRadius: theme.shape.borderRadius * 2,
-  background: alpha(theme.palette.background.paper, 0.8),
-  backdropFilter: 'blur(10px)',
-  border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`
-}));
+const GlassContainer = styled(Box)`
+  padding: 32px;
+  border-radius: 8px;
+  background: rgba(18, 18, 18, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(144, 202, 249, 0.1);
+`;
 
 const Welcome = () => {
   const { currentUser } = useAuth();
@@ -213,4 +213,4 @@ const Welcome = () => {
   );
 };
 
-export default Welcome; 
+export default Welcome;
