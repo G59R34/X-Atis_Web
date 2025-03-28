@@ -39,7 +39,7 @@ interface PrivateRouteProps {
 
 function PrivateRoute({ children }: PrivateRouteProps) {
   const { currentUser } = useAuth();
-  return currentUser ? <>{children}</> : <Navigate to="/login" />;
+  return currentUser ? <>{children}</> : <Navigate to="/welcome" />;
 }
 
 function App() {
@@ -58,23 +58,21 @@ function App() {
             }}
           >
             <Navbar />
-            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-              <Routes>
-                <Route path="/" element={
-                  <PrivateRoute>
-                    <Home />
-                  </PrivateRoute>
-                } />
-                <Route path="/metar" element={
-                  <PrivateRoute>
-                    <MetarSearch />
-                  </PrivateRoute>
-                } />
-                <Route path="/about" element={<About />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<SignUp />} />
-              </Routes>
-            </Box>
+            <Routes>
+              <Route path="/" element={<Welcome />} />
+              <Route path="/home" element={
+                <PrivateRoute>
+                  <Home />
+                </PrivateRoute>
+              } />
+              <Route path="/metar" element={
+                <PrivateRoute>
+                  <MetarSearch />
+                </PrivateRoute>
+              } />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<SignUp />} />
+            </Routes>
           </Box>
         </AuthProvider>
       </Router>

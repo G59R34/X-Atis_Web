@@ -9,13 +9,17 @@ import {
   Divider,
   Skeleton,
   useTheme,
-  alpha
+  alpha,
+  Button,
+  Link
 } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getValue, fetchAndActivate } from 'firebase/remote-config';
 import { useAuth } from '../contexts/AuthContext';
 import { remoteConfig } from '../firebase';
 import styled from '@emotion/styled';
+import { Link as RouterLink } from 'react-router-dom';
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 interface NewsItem {
   title: string;
@@ -34,9 +38,13 @@ const StyledCard = styled(motion(Card))`
 const GlassContainer = styled(Box)`
   padding: 32px;
   border-radius: 8px;
-  background: rgba(18, 18, 18, 0.8);
+  background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(144, 202, 249, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  max-width: 800px;
+  color: white;
+  text-align: center;
 `;
 
 const Welcome = () => {
@@ -89,124 +97,80 @@ const Welcome = () => {
   };
 
   return (
-    <Container maxWidth="md">
+    <Container
+      maxWidth="md"
+      sx={{
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        bgcolor: '#121212', // Ensure the background color is visible
+      }}
+    >
       <Box
         component={motion.div}
         initial="hidden"
         animate="visible"
         variants={containerVariants}
-        sx={{ mt: 4 }}
+        sx={{ width: '100%' }}
       >
         <GlassContainer>
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+          <Typography variant="h3" component="h1" gutterBottom>
+            Welcome to X-ATIS
+          </Typography>
+          <Typography variant="h6" gutterBottom sx={{ mb: 4 }}>
+            A Modern ATIS Information System
+          </Typography>
+          <Typography variant="body1" paragraph>
+            This application is currently in active development. We're working hard to bring you the best possible ATIS experience.
+          </Typography>
+          <Typography variant="body1" paragraph>
+            Check out our progress and contribute on GitHub:
+          </Typography>
+          <Button
+            variant="outlined"
+            startIcon={<GitHubIcon />}
+            component={Link}
+            href="https://github.com/yourusername/x-atis"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{ 
+              color: 'white',
+              borderColor: 'rgba(255, 255, 255, 0.3)',
+              '&:hover': {
+                borderColor: 'white',
+                backgroundColor: 'rgba(255, 255, 255, 0.1)'
+              },
+              mb: 4
+            }}
           >
-            <Typography 
-              variant="h4" 
-              component="h1" 
-              gutterBottom 
-              align="center"
-              sx={{
-                background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                color: 'transparent',
-                fontWeight: 'bold'
+            View on GitHub
+          </Button>
+          <Box>
+            <Button
+              component={RouterLink}
+              to="/login"
+              variant="contained"
+              sx={{ mr: 2 }}
+            >
+              Log In
+            </Button>
+            <Button
+              component={RouterLink}
+              to="/signup"
+              variant="outlined"
+              sx={{ 
+                color: 'white',
+                borderColor: 'rgba(255, 255, 255, 0.3)',
+                '&:hover': {
+                  borderColor: 'white',
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                }
               }}
             >
-              Welcome, {currentUser?.email}!
-            </Typography>
-          </motion.div>
-          
-          <Divider sx={{ 
-            my: 3,
-            background: `linear-gradient(90deg, transparent, ${alpha(theme.palette.primary.main, 0.3)}, transparent)`
-          }} />
-          
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            <Typography variant="h5" gutterBottom sx={{ fontWeight: 500 }}>
-              Latest Updates
-            </Typography>
-          </motion.div>
-
-          <AnimatePresence>
-            {loading ? (
-              Array.from(new Array(3)).map((_, index) => (
-                <StyledCard
-                  key={`skeleton-${index}`}
-                  variants={itemVariants}
-                  sx={{ mb: 2 }}
-                >
-                  <CardContent>
-                    <Skeleton variant="text" width="40%" height={32} />
-                    <Skeleton variant="text" width="100%" />
-                    <Skeleton variant="text" width="20%" />
-                  </CardContent>
-                </StyledCard>
-              ))
-            ) : (
-              news.map((item, index) => (
-                <StyledCard
-                  key={item.title}
-                  variants={itemVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="hidden"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  sx={{ 
-                    mb: 2,
-                    background: `linear-gradient(135deg, ${alpha(theme.palette.background.paper, 0.9)}, ${alpha(theme.palette.background.paper, 0.7)})`,
-                    backdropFilter: 'blur(10px)',
-                    border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
-                  }}
-                >
-                  <CardContent>
-                    <Typography 
-                      variant="h6" 
-                      gutterBottom
-                      sx={{ 
-                        color: theme.palette.primary.main,
-                        fontWeight: 500
-                      }}
-                    >
-                      {item.title}
-                    </Typography>
-                    <Typography 
-                      variant="body1" 
-                      paragraph
-                      sx={{ 
-                        color: alpha(theme.palette.text.primary, 0.9),
-                        lineHeight: 1.6
-                      }}
-                    >
-                      {item.content}
-                    </Typography>
-                    <Typography 
-                      variant="caption" 
-                      sx={{ 
-                        color: alpha(theme.palette.text.secondary, 0.8),
-                        display: 'block',
-                        textAlign: 'right'
-                      }}
-                    >
-                      {new Date(item.date).toLocaleDateString(undefined, {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })}
-                    </Typography>
-                  </CardContent>
-                </StyledCard>
-              ))
-            )}
-          </AnimatePresence>
+              Sign Up
+            </Button>
+          </Box>
         </GlassContainer>
       </Box>
     </Container>
