@@ -7,14 +7,40 @@ import styled from '@emotion/styled';
 const GlassContainer = styled(Box)`
   padding: 32px;
   border-radius: 8px;
-  background: rgba(18, 18, 18, 0.8);
+  background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(144, 202, 249, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   width: 100%;
   max-width: 400px;
+  color: white;
+
+  .MuiTextField-root {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+  }
+
+  .MuiInputBase-input {
+    color: white;
+  }
+
+  .MuiInputLabel-root {
+    color: rgba(255, 255, 255, 0.7) !important;
+  }
+
+  .MuiOutlinedInput-root {
+    fieldset {
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+    &:hover fieldset {
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+    &.Mui-focused fieldset {
+      border-color: #90caf9;
+    }
+  }
 `;
 
-export default function SignUp() {
+export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
@@ -44,8 +70,8 @@ export default function SignUp() {
   return (
     <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
       <GlassContainer>
-        <Typography variant="h5" component="h2" gutterBottom>
-          Sign Up
+        <Typography variant="h5" component="h2" gutterBottom sx={{ color: 'white' }}>
+          Log In
         </Typography>
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
         <Box component="form" onSubmit={handleSubmit}>
@@ -66,15 +92,6 @@ export default function SignUp() {
             margin="normal"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-          />
-          <TextField
-            label="Confirm Password"
-            type="password"
-            required
-            fullWidth
-            margin="normal"
-            value={passwordConfirm}
-            onChange={(e) => setPasswordConfirm(e.target.value)}
           />
           <Button
             type="submit"

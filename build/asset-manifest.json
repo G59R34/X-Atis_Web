@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/X-Atis_Web/static/css/main.e6c13ad2.css",
-    "main.js": "/X-Atis_Web/static/js/main.b8d8c202.js",
+    "main.js": "/X-Atis_Web/static/js/main.97ad3afb.js",
     "index.html": "/X-Atis_Web/index.html",
     "main.e6c13ad2.css.map": "/X-Atis_Web/static/css/main.e6c13ad2.css.map",
-    "main.b8d8c202.js.map": "/X-Atis_Web/static/js/main.b8d8c202.js.map"
+    "main.97ad3afb.js.map": "/X-Atis_Web/static/js/main.97ad3afb.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.b8d8c202.js"
+    "static/js/main.97ad3afb.js"
   ]
 }
